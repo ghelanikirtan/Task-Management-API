@@ -1,13 +1,21 @@
 from django.test import TestCase
+from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from rest_framework import status
 from .models import Task
-
 
 # 5. Unit Tests:
 class TaskAPITest(TestCase):
     def setUp(self):
         self.client = APIClient()
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='password123'
+        )
+        self.client.login(
+            username='kyghelani',
+            password = 'Kirt2002'
+        )
         self.task = Task.objects.create(
             title = 'Test Task',
             description = 'This is Test Task',
@@ -26,7 +34,18 @@ class TaskAPITest(TestCase):
         self.assertEqual(res.status_code, 200)
     
     # 3) Create a new task
-    def test_create_task(self):
+    def test_unauth_create_task(self):
+        self.client.logout()
+        new_task_data = {
+            "title" : "New testing task",
+            "description": "This is newly created testing task! hehe",
+            "due_date": "2024-02-15",
+            "status": "In Progress"
+        }
+        res = self.client.post('/tasks/', new_task_data, format='json')
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+    
+    def test_auth_create_task(self):
         new_task_data = {
             "title" : "New testing task",
             "description": "This is newly created testing task! hehe",

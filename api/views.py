@@ -8,7 +8,7 @@ from .permissions import IsOwnerOrReadOnly
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializers
-    permission_classes = [permissions.IsAuthenticated | IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
     
     def update(self, req, *args, **kwargs):
         partial = kwargs.pop('partial', False)
