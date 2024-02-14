@@ -51,6 +51,11 @@ $ python manage.py createsuperuser
 ```
 $ python manage.py runserver
 ```
+### Step 6:
+- **Run the Unit Tests**
+```
+$ python manage.py tests
+```  
 
 ---
 ## About RESTful API Endpoints [for local server host]:
