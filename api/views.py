@@ -1,13 +1,14 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 from .models import Task
 from .serializers import TaskSerializers
-
+from .permissions import IsOwnerOrReadOnly
 
 # 2. API Endpoints [CRUD Operations]
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializers
+    permission_classes = [permissions.IsAuthenticated | IsOwnerOrReadOnly]
     
     def update(self, req, *args, **kwargs):
         partial = kwargs.pop('partial', False)
